@@ -1,0 +1,110 @@
+Dataset:  ydata-tvsum50-v1_1
+
+===========================================================================
+Yahoo! TVSum50 Title-based Video Summarization dataset, version 1.1
+
+The TVSum50 dataset contains 50 videos and their shot-level subjective 
+importance scores annotated via crowdsourcing. The videos are collected 
+from YouTube in September 2014 and come with the Creative Commons (CC-BY)
+license. The dataset shall be used to evaluate automatic video
+summarization techniques.
+
+If you end up using the dataset, we ask you to cite the following paper:
+
+    Yale Song, Jordi Vallmitjana, Amanda Stent, Alejandro Jaimes.
+    "TVSum: Summarizing Web Videos using Titles," IEEE CVPR 2015
+
+If you have any question regarding the dataset, please contact:
+
+    Yale Song <yalesong@yahoo-inc.com>
+
+===========================================================================
+This dataset is provided as part of the Yahoo! Webscope program, to be
+used for approved non-commercial research purposes by recipients who 
+have signed a Data Sharing Agreement with Yahoo!. This dataset is not
+to be redistributed. No personally identifying information is available
+in this dataset. More information about the Yahoo! Webscope program is
+available at http://research.yahoo.com
+
+===========================================================================
+
+Full description:
+
+This dataset contains four zip-compressed archive files:
+
+    (1) ydata-tvsum50-video.zip
+    (2) ydata-tvsum50-thumbnail.zip
+    (3) ydata-tvsum50-data.zip
+    (4) ydata-tvsum50-matlab.zip
+
+---------------------------------------------------------------------------
+The first two zip archives contain 50 videos and their thumbnail images. 
+
+---------------------------------------------------------------------------
+The third (ydata-tvsum50-data.zip) contains two tsv-format data files:
+
+    ./data/ydata-tvsum50-info.tsv
+    ./data/ydata-tvsum50-anno.tsv
+
+The content of the two files are as follows:
+
+(a) "./data/ydata-tvsum50-info.tsv" contains metadata of the 50 videos,
+    with the following fields:
+
+        0 video category code (VT, VU, GA, MS, PK, PR, FM, BK, BT, DS)
+        1 video id
+        2 video title
+        3 url
+        4 length (MM:SS format) 
+
+    The 50 videos are grouped by 10 categories (5 videos per category).
+    The categories are identified by two-letter codes, whose names are: 
+
+        VT: Changing Vehicle Tire
+        VU: Getting Vehicle Unstuck
+        GA: Grooming an Animal
+        MS: Making Sandwich
+        PK: Parkour
+        PR: Parade
+        FM: Flash Mob Gathering
+        BK: Bee Keeping
+        BT: Attempting Bike Tricks
+        DS: Dog Show
+	
+(b) "./data/ydata-tvsum50-anno.tsv" contains shot importance annotations. 
+    The file contains the following fields:
+
+        0 video id
+        1 video category code
+        2 importance score, from 1 (low) to 5 (high)
+
+    Each line represents an annotation of a video made by one crowd-worker.
+    There are 1000 lines in the file (50 videos, 20 annotations per video).
+    The third field contains shot-level importance scores (comma-separated).
+    Each shot is always two-second long.
+	
+
+---------------------------------------------------------------------------
+The fourth zip archive (ydata-tvsum50-matlab.zip) contains the dataset in 
+MATLAB format as well as some scripts to evaluate your own summarization 
+results. Upon uncompressing, you will see the following files/directories:
+    
+    ./matlab/ydata-tvsum50.mat
+    ./matlab/[several matlab scripts]
+
+(a) "./matlab/ydata-tvsum50.mat" is a MATLAB format data file. It contains 
+    a single struct variable 'tvsum50' with the following fields
+
+    video      video id
+    category   two-letter video category code
+    title      video title
+    length     video duration (MM:SS format)
+    nframes    number of frames
+    user_anno  shot-level importance scores made by 20 human judges 
+    gt_score   average shot-level importance score
+
+(b) "./matmab/[several matlab scripts]“ contains MATLAB scripts describing 
+   how you can evaluate your own summarization results.
+
+
+Last edit: March 18, 2016
