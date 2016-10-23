@@ -8,8 +8,13 @@ chmod +x ./run_this.sh
 ./run_this.sh
 ```
 
-Following list of libraries is needed: [imageio](https://imageio.github.io/). If you have pip installed, just run
+Following is the list of dependencies: [imageio](https://imageio.github.io/). 
 ```
 sudo pip install imageio
 ```
-
+The same goes for numpy, matplotlib. For opencv on Mac,
+```
+brew install opencv3
+brew install webp
+```
+The second command fixes an issue with importing opencv on Mac.
