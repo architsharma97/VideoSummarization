@@ -15,6 +15,7 @@ sampling_rate=int(sys.argv[2])
 
 #manual function to generate a 3D tensor representing histogram
 def generate_histogram(frame):
+	global num_bins, sampling_rate
 	histogram=np.zeros(num_bins,num_bins,num_bins)
 	for row in range(len(frame)):
 		for row in range(len(frame[row])):
@@ -23,6 +24,7 @@ def generate_histogram(frame):
 	return histogram
 
 def main():
+	global num_bins, sampling_rate
 	video=imageio.get_reader(sys.argv[1]);
 
 	#choosing the subset of frames from which video summary will be generateed
