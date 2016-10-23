@@ -10,7 +10,7 @@ num_bins=16
 range_per_bin=256/num_bins
 
 #frame chosen every k frames
-sampling_rate=sys.argv[2]
+sampling_rate=int(sys.argv[2])
 
 #manual function to generate a 3D tensor representing histogram
 def generate_histogram(frame):
@@ -33,7 +33,7 @@ def main():
 	for i,col in enumerate(channels):
 		hist.append([cv2.calcHist(video.get_data(j*sampling_rate),[i],None,[num_bins],[0,256]) for j in range(len(video)/sampling_rate)])
 
-	
+
 
 if __name__ == '__main__':
 	main()
