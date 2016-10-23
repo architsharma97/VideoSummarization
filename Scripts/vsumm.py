@@ -2,6 +2,7 @@ import sys
 import imageio
 import numpy as np
 import cv2
+import tensorflow as tf
 
 # defines the number of bins for pixel values of each type {r,g,b}
 num_bins=16

@@ -8,11 +8,11 @@ chmod +x ./run_this.sh
 ./run_this.sh
 ```
 
-Following is the list of dependencies: [imageio](https://imageio.github.io/), numpy, matplotlib, opencv3. 
+Following is the list of dependencies: [imageio](https://imageio.github.io/), numpy, matplotlib, opencv3, tensorflow. 
 ```
 sudo pip install imageio
 ```
-The same goes for numpy, matplotlib. For opencv on Mac OSX,
+The same goes for numpy, matplotlib, tensorflow. For opencv on Mac OSX,
 ```
 brew install opencv3
 brew install webp
