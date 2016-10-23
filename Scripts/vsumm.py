@@ -25,14 +25,18 @@ def generate_histogram(frame):
 def main():
 	video=imageio.get_reader(sys.argv[1]);
 
+	#choosing the subset of frames from which video summary will be generateed
+	frames=[video.get_data(i*sampling_rate) for i in range(len(video)/sampling_rate)]
+	
 	#manually generated histogram
-	color_histogram=[generate_histogram(video.get_data(i*sampling_rate)) for i in range(len(video)/sampling_rate)]
+	color_histogram=[generate_histogram(frame) for frame in frames]
 
 	#opencv: generates 3 histograms corresponding to each channel for each frame
 	channels=['b','g','r']
 	hist=[]
 	for i,col in enumerate(channels):
-		hist.append([cv2.calcHist(video.get_data(j*sampling_rate),[i],None,[num_bins],[0,256]) for j in range(len(video)/sampling_rate)])
+		hist.append([cv2.calcHist([frame],[i],None,[num_bins],[0,256]) for frame in frames])
+    
 
 
 
