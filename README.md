@@ -12,9 +12,9 @@ Following is the list of dependencies: [imageio](https://imageio.github.io/).
 ```
 sudo pip install imageio
 ```
-The same goes for numpy, matplotlib. For opencv on Mac,
+The same goes for numpy, matplotlib. For opencv on Mac OSX,
 ```
 brew install opencv3
 brew install webp
 ```
-The second command fixes an issue with importing opencv on Mac.
+The second command fixes an issue with importing opencv on Mac OSX.
