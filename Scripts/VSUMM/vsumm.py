@@ -12,7 +12,7 @@ from sklearn.cluster import KMeans
 # Argument 1: Location of the video
 # Argument 2: Sampling rate (k where every kth frame is chosed)
 # Argument 3: Number of frames in the keyframe summany (Hence the number of cluster)
-# NOTE: pass the number of clusters as -1 to choose the number of frames according to user defined summary
+# NOTE: pass the number of clusters as -1 to choose 1/50 the number of frames in original video
 # Only valid for SumMe dataset
 
 # optional arguments 
@@ -54,7 +54,7 @@ def save_keyframes(frame_indices, summary_frames):
 
 	print "Saving frames"
 	for i,frame in enumerate(summary_frames):
-		cv2.imwrite(str(sys.argv[6])+"frame%d.jpg"%i, frame)
+		cv2.imwrite(str(sys.argv[6])+"keyframes/frame%d.jpg"%i, frame)
 	print "Frames saved"
 
 def main():
@@ -94,7 +94,8 @@ def main():
 		video_address[len(video_address)-1]=gt_file
 		video_address[len(video_address)-2]='GT'
 		gt_file='/'.join(video_address)
-		num_centroids=int(scipy.io.loadmat(gt_file).get('user_score').shape[0])
+		num_frames=int(scipy.io.loadmat(gt_file).get('user_score').shape[0])
+		num_centroids=int(0.02*num_frames)
 
 	kmeans=KMeans(n_clusters=num_centroids).fit(hist)
 	print "Done Clustering!"
@@ -114,7 +115,7 @@ def main():
 	summary_frames=[frames[i] for i in frame_indices]
 	print "Generated summary"
 
-	if len(sys.argv)>5 and sys.argv[5]==1:
+	if len(sys.argv)>5 and int(sys.argv[5])==1:
 		save_keyframes(frame_indices, summary_frames)
 		
 if __name__ == '__main__':
