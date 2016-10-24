@@ -1,8 +1,11 @@
+# k means clustering to generate video summary
 import sys
 import imageio
 import numpy as np
 import cv2
-import tensorflow as tf
+
+# k-means
+from sklearn.cluster import KMeans
 
 # defines the number of bins for pixel values of each type {r,g,b}
 num_bins=16
@@ -39,8 +42,11 @@ def main():
 	for i,col in enumerate(channels):
 		hist.append([cv2.calcHist([frame],[i],None,[num_bins],[0,256]) for frame in frames])
     
+	#clustering
 
-
-
+	#unfold the tensor into a vector
+	color_histogram=np.asarray([hist.flatten() for hist in color_histogram])
+	
+		
 if __name__ == '__main__':
 	main()
