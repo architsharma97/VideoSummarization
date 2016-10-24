@@ -46,10 +46,11 @@ def generate_histogram(frame):
 	print "Generated Histogram"
 
 def save_keyframes(frame_indices, summary_frames):
+	global sampling_rate
 	print "Saving frame indices"
 	out_file=open(sys.argv[6]+"frame_indices_"+sys.argv[3]+"_"+str(sampling_rate)+".txt",'w')
 	for idx in frame_indices:
-		out_file.write(str(idx)+'\n')
+		out_file.write(str(idx*sampling_rate)+'\n')
 	print "Saved indices"
 
 	print "Saving frames"
@@ -95,7 +96,8 @@ def main():
 		video_address[len(video_address)-2]='GT'
 		gt_file='/'.join(video_address)
 		num_frames=int(scipy.io.loadmat(gt_file).get('user_score').shape[0])
-		num_centroids=int(0.02*num_frames)
+		# automatic summary sizing: summary assumed to be 1/100 of original video
+		num_centroids=int(0.01*num_frames)
 
 	kmeans=KMeans(n_clusters=num_centroids).fit(hist)
 	print "Done Clustering!"
