@@ -3,7 +3,7 @@ import sys
 import imageio
 import numpy as np
 import cv2
-import scipy
+import scipy.io
 
 # k-means
 from sklearn.cluster import KMeans
@@ -94,7 +94,7 @@ def main():
 		video_address[len(video_address)-1]=gt_file
 		video_address[len(video_address)-2]='GT'
 		gt_file='/'.join(video_address)
-		num_centroids=int(scipy.io.loadmat(gt_file).get('nFrames'))
+		num_centroids=int(scipy.io.loadmat(gt_file).get('user_score').shape[0])
 
 	kmeans=KMeans(n_clusters=num_centroids).fit(hist)
 	print "Done Clustering!"

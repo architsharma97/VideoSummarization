@@ -1,8 +1,8 @@
 #!/bin/bash
 DIR=../../Data/SumMe/videos/;
 OUT=../../Results/SumMe/VSUMM/;
-sampling_rate
-for filename in $DIR"*.mp4"; do
+sampling_rate=100
+for filename in $DIR"paluma_jump.mp4"; do
 	name=${filename##*/};
 	folder_name=${name%.mp4}
 	mkdir $OUT$folder_name
