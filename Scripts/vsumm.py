@@ -71,10 +71,12 @@ def main():
 
 	print "Generating summary frames"
 	summary_frames=[]
+	
 	# transforms into cluster-distance space (n_cluster dimensional)
 	hist_transform=kmeans.transform(hist)
 	for cluster in range(hist_transform.shape[1]):
-		
+		summary_frames.append(frames[np.argmin(hist_transform.T[cluster])])
+	print "Generated summary"
 
 if __name__ == '__main__':
 	main()
