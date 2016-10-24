@@ -11,7 +11,11 @@ from sklearn.cluster import KMeans
 # Argument 1: Location of the video
 # Argument 2: Sampling rate (k where every kth frame is chosed)
 # Argument 3: Number of frames in the keyframe summany (Hence the number of cluster)
+
+# optional arguments 
 # Argument 4: 1: if 3D Histograms need to be generated and clustered, else 0
+# Argument 5: 1: if want to save keyframes
+# Argument 6: directory where keyframes will be saved
 
 # defines the number of bins for pixel values of each type {r,g,b}
 num_bins=16
@@ -38,6 +42,12 @@ def generate_histogram(frame):
 	return histogram
 	print "Generated Histogram"
 
+def save_keyframes(summary_frames):
+	print "Saving frames"
+	for i,frame in enumerate(summary_frames):
+		cv2.imwrite(str(sys.argv[6])+"frame%d.jpg"%i, frame)
+	print "Frames saved"
+
 def main():
 	global num_bins, sampling_rate, num_centroids
 	print "Opening video!"
@@ -46,6 +56,7 @@ def main():
 	#choosing the subset of frames from which video summary will be generateed
 	frames=[video.get_data(i*sampling_rate) for i in range(len(video)/sampling_rate)]
 	print "Frames chosen"
+	print "Length of video %d" % len(video)
 
 	if len(sys.argv)>4 and int(sys.argv[4])==1:
 		print "Generating 3D Tensor Histrograms"
@@ -71,12 +82,19 @@ def main():
 
 	print "Generating summary frames"
 	summary_frames=[]
-	
+
 	# transforms into cluster-distance space (n_cluster dimensional)
 	hist_transform=kmeans.transform(hist)
+	frame_indices=[]
 	for cluster in range(hist_transform.shape[1]):
-		summary_frames.append(frames[np.argmin(hist_transform.T[cluster])])
+		print "Frame number: %d" % (np.argmin(hist_transform.T[cluster])*sampling_rate)
+		frame_indices.append(np.argmin(hist_transform.T[cluster]))
+	
+	# frames generated in sequence from original video
+	summary_frames=[frames[i] for i in sorted(frame_indices)]
 	print "Generated summary"
 
+	if len(sys.argv)>5 and sys.argv[5]==1:
+		save_keyframes(summary_frames)
 if __name__ == '__main__':
 	main()
