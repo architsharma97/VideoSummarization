@@ -11,7 +11,7 @@ from sklearn.cluster import KMeans
 # System Arguments
 # Argument 1: Location of the video
 # Argument 2: Sampling rate (k where every kth frame is chosed)
-# Argument 3: Number of frames in the keyframe summany (Hence the number of cluster)
+# Argument 3: Percentage of frames in the keyframe summany (Hence the number of cluster)
 # NOTE: pass the number of clusters as -1 to choose 1/50 the number of frames in original video
 # Only valid for SumMe dataset
 
@@ -71,6 +71,8 @@ def main():
 	print "Frames chosen"
 	print "Length of video %d" % len(video)
 
+	# converting percentage to actual number
+	num_centroids=int(num_centroids*len(video)/100)	
 	if (len(video)/sampling_rate) < num_centroids:
 		print "Samples too less to generate such a large summary"
 		print "Changing to maximum possible centroids"

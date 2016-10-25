@@ -18,6 +18,7 @@ def main():
 	sampling_rate=int(sys.argv[2])
 	n_clusters=int(sys.argv[3])
 	video_length=len(imageio.get_reader(sys.argv[1]))
+	n_clusters=int(n_clusters*video_length/100)
 	if video_length/sampling_rate < n_clusters:
 		n_clusters=video_length/sampling_rate
 
