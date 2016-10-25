@@ -17,8 +17,9 @@ from sklearn.cluster import KMeans
 
 # optional arguments 
 # Argument 4: 1: if 3D Histograms need to be generated and clustered, else 0
-# Argument 5: 1: if want to save keyframes, frame indices
-# Argument 6: directory where keyframes will be saved
+# Argument 5: 1: if want to save keyframes 
+# Argument 6: 1: if want to save the frame indices
+# Argument 7: directory where keyframes will be saved
 
 # defines the number of bins for pixel values of each type {r,g,b}
 num_bins=16
@@ -47,16 +48,18 @@ def generate_histogram(frame):
 
 def save_keyframes(frame_indices, summary_frames):
 	global sampling_rate
-	print "Saving frame indices"
-	out_file=open(sys.argv[6]+"frame_indices_"+sys.argv[3]+"_"+str(sampling_rate)+".txt",'w')
-	for idx in frame_indices:
-		out_file.write(str(idx*sampling_rate)+'\n')
-	print "Saved indices"
+	if int(sys.argv[6])==1:
+		print "Saving frame indices"
+		out_file=open(sys.argv[7]+"frame_indices_"+sys.argv[3]+"_"+str(sampling_rate)+".txt",'w')
+		for idx in frame_indices:
+			out_file.write(str(idx*sampling_rate)+'\n')
+		print "Saved indices"
 
-	print "Saving frames"
-	for i,frame in enumerate(summary_frames):
-		cv2.imwrite(str(sys.argv[6])+"keyframes/frame%d.jpg"%i, frame)
-	print "Frames saved"
+	if int(sys.argv[5])==1:
+		print "Saving frames"
+		for i,frame in enumerate(summary_frames):
+			cv2.imwrite(str(sys.argv[7])+"keyframes/frame%d.jpg"%i, frame)
+		print "Frames saved"
 
 def main():
 	global num_bins, sampling_rate, num_centroids
@@ -117,7 +120,7 @@ def main():
 	summary_frames=[frames[i] for i in frame_indices]
 	print "Generated summary"
 
-	if len(sys.argv)>5 and int(sys.argv[5])==1:
+	if len(sys.argv)>5 and (int(sys.argv[5])==1 or int(sys.argv[6])==1):
 		save_keyframes(frame_indices, summary_frames)
 		
 if __name__ == '__main__':
