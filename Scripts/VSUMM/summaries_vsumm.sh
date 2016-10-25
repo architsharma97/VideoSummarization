@@ -1,16 +1,21 @@
 #!/bin/bash
 DIR=../../Data/SumMe/videos/;
 OUT=../../Results/SumMe/VSUMM/;
-
+HOMEDIR=$PWD;
 # choose pre-sampling rates and number of clusters for videos
 # -1 for n_clusters defaults to 1/100 of video length
 sampling_rate=30;
 n_clusters=20;
 
-for filename in $DIR"*.mp4"; do
+for filename in $DIR"paluma_jump.mp4" $DIR"Playing_on_water_slide.mp4"; do
+	if [${PWD}!=$HOMEDIR]
+		then cd $HOMEDIR
+	fi
 	name=${filename##*/};
 	folder_name=${name%.mp4};
 	mkdir $OUT$folder_name;
 	mkdir $OUT$folder_name"/keyframes";
 	python vsumm.py $filename $sampling_rate $n_clusters 0 1 $OUT$folder_name"/";
+	cd ../Evaluation
+	python evaluate.py $filename $sampling_rate $n_clusters $OUT$folder_name"/";
 done
