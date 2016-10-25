@@ -4,13 +4,11 @@ OUT=../../Results/SumMe/VSUMM/;
 HOMEDIR=$PWD;
 # choose pre-sampling rates and number of clusters for videos
 # -1 for n_clusters defaults to 1/100 of video length
-sampling_rate=30;
-n_clusters=20;
+sampling_rate=1;
+n_clusters=200;
 
-for filename in $DIR"paluma_jump.mp4" $DIR"Playing_on_water_slide.mp4"; do
-	if [${PWD}!=$HOMEDIR]
-		then cd $HOMEDIR
-	fi
+for filename in $DIR"paluma_jump.mp4"; do
+	cd $HOMEDIR
 	name=${filename##*/};
 	folder_name=${name%.mp4};
 	mkdir $OUT$folder_name;
