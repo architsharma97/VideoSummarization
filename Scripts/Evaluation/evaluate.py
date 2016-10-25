@@ -17,6 +17,9 @@ def main():
 	directory=sys.argv[4]
 	sampling_rate=int(sys.argv[2])
 	n_clusters=int(sys.argv[3])
+	video_length=len(imageio.get_reader(sys.argv[1]))
+	if video_length/sampling_rate < n_clusters:
+		n_clusters=video_length/sampling_rate
 
 	print "Getting frames of summary!"
 	frame_indices=[int(idx) for idx in open(directory+'frame_indices_'+str(n_clusters)+'_'+str(sampling_rate)+'.txt','r').read().splitlines()]

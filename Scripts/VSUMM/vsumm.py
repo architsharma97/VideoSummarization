@@ -47,10 +47,10 @@ def generate_histogram(frame):
 	print "Generated Histogram"
 
 def save_keyframes(frame_indices, summary_frames):
-	global sampling_rate
+	global sampling_rate, num_centroids
 	if int(sys.argv[6])==1:
 		print "Saving frame indices"
-		out_file=open(sys.argv[7]+"frame_indices_"+sys.argv[3]+"_"+str(sampling_rate)+".txt",'w')
+		out_file=open(sys.argv[7]+"frame_indices_"+str(num_centroids)+"_"+str(sampling_rate)+".txt",'w')
 		for idx in frame_indices:
 			out_file.write(str(idx*sampling_rate)+'\n')
 		print "Saved indices"
@@ -73,7 +73,8 @@ def main():
 
 	if (len(video)/sampling_rate) < num_centroids:
 		print "Samples too less to generate such a large summary"
-		sys.exit()
+		print "Changing to maximum possible centroids"
+		num_centroids=len(video)/sampling_rate
 		
 	if len(sys.argv)>4 and int(sys.argv[4])==1:
 		print "Generating 3D Tensor Histrograms"
