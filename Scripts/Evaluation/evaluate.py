@@ -45,5 +45,10 @@ def main():
 		out_file=open(sys.argv[5],'a')
 		out_file.write("%d,%d,%f,%f\n"%(sampling_rate,n_clusters,f_measure,summary_length))
 	
+	methodNames={'VSUMM using Color Histrograms'}
+	summaries={}
+	summaries[0]=frame_indices
+	plotAllResults(summaries,methodNames,videoName,HOMEDATA)
+
 if __name__ == '__main__':
 	main()

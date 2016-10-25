@@ -9,9 +9,9 @@ HOMEDIR=$PWD;
 # "2" "5" "10" "25" "30" "50" "75" "100"
 
 # percent of the actual video
-for n_clusters in "10" "15"; do
+for n_clusters in "15"; do
 	for sampling_rate in "1"; do
-		for filename in $DIR"Air_Force_One.mp4"; do
+		for filename in $DIR"Playing_on_water_slide.mp4"; do
 			echo $sampling_rate
 			cd $HOMEDIR
 			name=${filename##*/};
