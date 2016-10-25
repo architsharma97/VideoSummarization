@@ -7,7 +7,7 @@ OUT=../../Results/SumMe/VSUMM/;
 sampling_rate=30;
 n_clusters=20;
 
-for filename in $DIR"paluma_jump.mp4"; do
+for filename in $DIR"*.mp4"; do
 	name=${filename##*/};
 	folder_name=${name%.mp4};
 	mkdir $OUT$folder_name;
