@@ -39,7 +39,7 @@ def main():
 
 	if len(sys.argv)>5:
 		out_file=open(sys.argv[5],'a')
-		out_file.write("%d,%d,%.3f,%.2f"%(sampling_rate,n_clusters,f_measure,summary_length))
+		out_file.write("%d,%d,%f,%f\n"%(sampling_rate,n_clusters,f_measure,summary_length))
 	
 if __name__ == '__main__':
 	main()

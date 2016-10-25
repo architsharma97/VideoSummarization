@@ -71,6 +71,10 @@ def main():
 	print "Frames chosen"
 	print "Length of video %d" % len(video)
 
+	if (len(video)/sampling_rate) < num_centroids:
+		print "Samples too less to generate such a large summary"
+		sys.exit()
+		
 	if len(sys.argv)>4 and int(sys.argv[4])==1:
 		print "Generating 3D Tensor Histrograms"
 		#manually generated histogram
