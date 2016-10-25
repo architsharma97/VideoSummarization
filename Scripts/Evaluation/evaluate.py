@@ -9,6 +9,9 @@ import imageio
 # Argument 3: Number of clusters
 # Argument 4: Results folder
 
+# OPTIONAL
+# Argument 5: File where the results will be written
+
 def main():
 	video=sys.argv[1]
 	directory=sys.argv[4]
@@ -34,5 +37,9 @@ def main():
 	f_measure, summary_length=evaluateSummary(frame_indices,videoName,HOMEDATA)
 	print "F-measure %.3f at length %.2f" %(f_measure, summary_length)
 
+	if len(sys.argv)>5:
+		out_file=open(sys.argv[5],'a')
+		out_file.write("%d,%d,%.3f,%.2f"%(sampling_rate,n_clusters,f_measure,summary_length))
+	
 if __name__ == '__main__':
 	main()
