@@ -9,8 +9,8 @@ HOMEDIR=$PWD;
 # "1" "2" "5" "10" "25" "30"
 
 # percent of the actual video
-for percent in "10" "15"; do
-	for sampling_rate in "1" "2" "5" "10" "25" "30"; do
+for percent in "15"; do
+	for sampling_rate in "1" "30"; do
 		for filename in $DIR*".mp4"; do
 			echo $filename
 			echo $sampling_rate
