@@ -1,12 +1,12 @@
 import sys
 sys.path.append("../../Data/SumMe/python")
-
+import os
 from summe import *
 import imageio
 # System Arguments
 # Argument 1: Location of the video
 # Argument 2: Sampling rate
-# Argument 3: Number of clusters
+# Argument 3: Percentage of clusters
 # Argument 4: Results folder
 
 # OPTIONAL
@@ -42,13 +42,18 @@ def main():
 	print "F-measure %.3f at length %.2f" %(f_measure, summary_length)
 
 	if len(sys.argv)>5:
-		out_file=open(sys.argv[5],'a')
+		if os.path.exists(sys.argv[5])==False:
+			out_file=open(sys.argv[5],'a')
+			out_file.write("Sampling rate, Number of Clusters, F-measure, Summary Length\n")
+		else:
+			out_file=open(sys.argv[5],'a')
 		out_file.write("%d,%d,%f,%f\n"%(sampling_rate,n_clusters,f_measure,summary_length))
 	
-	methodNames={'VSUMM using Color Histrograms'}
-	summaries={}
-	summaries[0]=frame_indices
-	plotAllResults(summaries,methodNames,videoName,HOMEDATA)
+	# optional plotting of results
+	# methodNames={'VSUMM using Color Histrograms'}
+	# summaries={}
+	# summaries[0]=frame_indices
+	# plotAllResults(summaries,methodNames,videoName,HOMEDATA)
 
 if __name__ == '__main__':
 	main()
