@@ -6,7 +6,7 @@ import imageio
 # System Arguments
 # Argument 1: Location of the video
 # Argument 2: Sampling rate
-# Argument 3: Percentage of clusters
+# Argument 3: Percentage of video as summary
 # Argument 4: Results folder
 
 # OPTIONAL
@@ -16,9 +16,9 @@ def main():
 	video=sys.argv[1]
 	directory=sys.argv[4]
 	sampling_rate=int(sys.argv[2])
-	n_clusters=int(sys.argv[3])
+	percent=int(sys.argv[3])
 	video_length=len(imageio.get_reader(sys.argv[1]))
-	n_clusters=int(n_clusters*video_length/100)
+	n_clusters=int(percent*video_length/100)
 	if video_length/sampling_rate < n_clusters:
 		n_clusters=video_length/sampling_rate
 
