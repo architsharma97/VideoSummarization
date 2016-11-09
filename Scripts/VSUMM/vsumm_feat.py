@@ -15,7 +15,7 @@ from get_video_feat import *
 # Argument 1: Location of the video
 # Argument 2: Sampling rate (k where every kth frame is chosed)
 # Argument 3: Percentage of frames in the keyframe summany (Hence the number of cluster)
-# NOTE: pass the number of clusters as -1 to choose 1/50 the number of frames in original video
+# NOTE: pass the number of clusters as -1 to choose 1/10 the number of frames in original video
 # Only valid for SumMe dataset
 
 # optional arguments 
@@ -86,11 +86,7 @@ if __name__ == '__main__':
 
     # converting percentage to actual number
     num_centroids=int(percent*len(video)/100)   
-    if (len(video)/sampling_rate) < num_centroids:
-        print "Samples too less to generate such a large summary"
-        print "Changing to maximum possible centroids"
-        num_centroids=len(video)/sampling_rate
-
+    
 	# choose number of centroids for clustering from user required frames (specified in GT folder for each video)
     if percent==-1:
     	video_address=sys.argv[1].split('/')
@@ -99,8 +95,13 @@ if __name__ == '__main__':
     	video_address[len(video_address)-2]='GT'
     	gt_file='/'.join(video_address)
     	num_frames=int(scipy.io.loadmat(gt_file).get('user_score').shape[0])
-    	# automatic summary sizing: summary assumed to be 1/100 of original video
+    	# automatic summary sizing: summary assumed to be 1/10 of original video
     	num_centroids=int(0.1*num_frames)
+
+    if (len(video)/sampling_rate) < num_centroids:
+        print "Samples too less to generate such a large summary"
+        print "Changing to maximum possible centroids"
+        num_centroids=len(video)/sampling_rate
 
     kmeans=KMeans(n_clusters=num_centroids).fit(features)
     print "Done Clustering!"

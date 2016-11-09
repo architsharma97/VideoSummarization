@@ -3,7 +3,7 @@ DIR=../../Data/SumMe/videos/;
 OUT=../../Results/SumMe/VSUMM/;
 HOMEDIR=$PWD;
 # choose pre-sampling rates and number of clusters for videos
-# -1 for percent defaults to 1/100 of video length
+# -1 for percent defaults to 1/10 of video length
 
 # sampling rates for future use
 # "1" "2" "5" "10" "25" "30"
