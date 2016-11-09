@@ -31,7 +31,10 @@ range_per_bin=256/num_bins
 sampling_rate=int(sys.argv[2])
 
 # number of centroids
-num_centroids=int(sys.argv[3])
+percent=int(sys.argv[3])
+
+# globalizing
+num_centroids=0
 
 # manual function to generate a 3D tensor representing histogram
 # extremely slow
@@ -62,7 +65,7 @@ def save_keyframes(frame_indices, summary_frames):
 		print "Frames saved"
 
 def main():
-	global num_bins, sampling_rate, num_centroids
+	global num_bins, sampling_rate, percent, num_centroids
 	print "Opening video!"
 	video=imageio.get_reader(sys.argv[1]);
 	print "Video opened\nChoosing frames"
@@ -72,7 +75,7 @@ def main():
 	print "Length of video %d" % len(video)
 
 	# converting percentage to actual number
-	num_centroids=int(num_centroids*len(video)/100)	
+	num_centroids=int(percent*len(video)/100)	
 	if (len(video)/sampling_rate) < num_centroids:
 		print "Samples too less to generate such a large summary"
 		print "Changing to maximum possible centroids"
@@ -99,7 +102,7 @@ def main():
 	print "Clustering"
 
 	# choose number of centroids for clustering from user required frames (specified in GT folder for each video)
-	if num_centroids==-1:
+	if percent==-1:
 		video_address=sys.argv[1].split('/')
 		gt_file=video_address[len(video_address)-1].split('.')[0]+'.mat'
 		video_address[len(video_address)-1]=gt_file
@@ -107,7 +110,7 @@ def main():
 		gt_file='/'.join(video_address)
 		num_frames=int(scipy.io.loadmat(gt_file).get('user_score').shape[0])
 		# automatic summary sizing: summary assumed to be 1/100 of original video
-		num_centroids=int(0.01*num_frames)
+		num_centroids=int(0.1*num_frames)
 
 	kmeans=KMeans(n_clusters=num_centroids).fit(hist)
 	print "Done Clustering!"
