@@ -19,7 +19,7 @@ for percent in "15"; do
 			folder_name=${name%.mp4};
 			mkdir $OUT$folder_name;
 			mkdir $OUT$folder_name"/keyframes";
-			python vsumm.py $filename $sampling_rate $percent 0 0 1 $OUT$folder_name"/";
+			python vsumm_feat.py $filename $sampling_rate $percent 0 0 1 $OUT$folder_name"/";
 			cd ../Evaluation
 			python evaluate.py $filename $sampling_rate $percent $OUT$folder_name"/" $OUT$folder_name"/Final_Results_"$percent".txt";
 		done

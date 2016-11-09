@@ -9,8 +9,6 @@ import scipy.io
 from sklearn.cluster import KMeans
 from get_video_feat import *
 
-# In[24]:
-
 # System Arguments
 # Argument 1: Location of the video
 # Argument 2: Sampling rate (k where every kth frame is chosed)
@@ -23,8 +21,6 @@ from get_video_feat import *
 # Argument 5: 1: if want to save keyframes 
 # Argument 6: 1: if want to save the frame indices
 # Argument 7: directory where keyframes will be saved
-
-# In[25]:
 
 #frame chosen every k frames
 sampling_rate=int(sys.argv[2])
@@ -51,9 +47,7 @@ def save_keyframes(frame_indices, summary_frames):
 			cv2.imwrite(str(sys.argv[7])+"keyframes/frame%d.jpg"%i, frame)
         print('frames saved')
 
-
-# In[ ]:
-if __name__ == '__main__':
+def main():
     global num_bins, sampling_rate, num_centroids, percent
     print "Opening video!"
     capture = cv2.VideoCapture(sys.argv[1])
@@ -123,3 +117,6 @@ if __name__ == '__main__':
     
     if len(sys.argv)>5 and (int(sys.argv[5])==1 or int(sys.argv[6])==1):
         save_keyframes(frame_indices, summary_frames)
+
+if __name__ == '__main__':
+    main()
