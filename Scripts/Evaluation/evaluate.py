@@ -9,8 +9,9 @@ import imageio
 # Argument 3: Percentage of video as summary
 # Argument 4: Results folder
 
-# OPTIONAL
+
 # Argument 5: File where the results will be written
+# Argument 6: Name of the features used
 
 def main():
 	video=sys.argv[1]
@@ -23,7 +24,7 @@ def main():
 		n_clusters=video_length/sampling_rate
 
 	print "Getting frames of summary!"
-	frame_indices=[int(idx) for idx in open(directory+'frame_indices_'+str(n_clusters)+'_'+str(sampling_rate)+'.txt','r').read().splitlines()]
+	frame_indices=[int(idx) for idx in open(directory+'frame_indices_'+ sys.argv[6]+'_'+str(n_clusters)+'_'+str(sampling_rate)+'.txt','r').read().splitlines()]
 	print "Got the frames'"
 
 	video=video.split('/')
