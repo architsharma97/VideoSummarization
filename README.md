@@ -14,7 +14,7 @@ sudo pip install imageio
 ```
 The same goes for numpy, matplotlib, tensorflow, scikit-learn. For opencv on Mac OSX,
 ```
-brew install opencv3
+brew tap homebrew/science && brew install --HEAD opencv3 --with-contrib --with-ffmpeg
 brew install webp
 ```
 The second command fixes an issue with importing opencv on Mac OSX.
