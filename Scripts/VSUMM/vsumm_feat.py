@@ -1,3 +1,4 @@
+# generic VSUMM to test with different features
 # k means clustering to generate video summary
 import sys
 
@@ -60,12 +61,12 @@ def main():
     while(capture.isOpened()):
         if i%sampling_rate==0:
             capture.set(1,i)
-            print i
+            # print i
             ret, frame = capture.read()
             if frame is None :
                 break
             #im = np.expand_dims(im, axis=0) #convert to (1, width, height, depth)
-            print frame.shape
+            # print frame.shape
             frames.append(np.asarray(frame))
         i+=1
     frames = np.array(frames)#convert to (num_frames, width, height, depth)
@@ -97,7 +98,7 @@ def main():
     if len(frames) < num_centroids:
         print "Samples too less to generate such a large summary"
         print "Changing to maximum possible centroids"
-        num_centroids=len(video)/sampling_rate
+        num_centroids=frames.shape[0]
 
     kmeans=KMeans(n_clusters=num_centroids).fit(features)
     print "Done Clustering!"

@@ -17,7 +17,7 @@ def get_cnn_feat(frames_raw):
         im[:,:,0] -= 103.939
         im[:,:,1] -= 116.779
         im[:,:,2] -= 123.68
-        print im.shape
+        # print im.shape
         im = np.expand_dims(im, axis=0)
         print im.shape
         frames.append(np.asarray(im))
