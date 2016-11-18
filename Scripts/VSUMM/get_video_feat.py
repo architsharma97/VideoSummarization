@@ -8,9 +8,11 @@ from vgg16 import VGG16
 from keras.preprocessing import image
 from imagenet_utils import preprocess_input
 from keras.models import Model
+from sklearn.decomposition import PCA
 
 def get_cnn_feat(frames_raw):
     frames=[]
+    pca=PCA(n_components=500)
     for im in frames_raw:
         print im.shape
         im = cv2.resize(im, (224, 224)).astype(np.float32)
@@ -33,4 +35,4 @@ def get_cnn_feat(frames_raw):
         print x.shape
         features[i,:] = model.predict(x)
         i+=1
-    return features
+    return pca.fit_transform(features)
