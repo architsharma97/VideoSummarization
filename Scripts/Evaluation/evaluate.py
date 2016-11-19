@@ -3,6 +3,7 @@ sys.path.append("../../Data/SumMe/python")
 import os
 from summe import *
 import imageio
+import cv2
 # System Arguments
 # Argument 1: Location of the video
 # Argument 2: Sampling rate
@@ -22,6 +23,13 @@ def main():
 	n_clusters=int(percent*video_length/100)
 	if video_length/sampling_rate < n_clusters:
 		n_clusters=video_length/sampling_rate
+
+	if sys.argv[6]=="color_hist":
+		video_cv=cv2.VideoCapture(os.path.abspath(os.path.expanduser(sys.argv[1])))
+		fps=int(video_cv.get(cv2.CAP_PROP_FPS))
+		frame_count=int(video_cv.get(cv2.CAP_PROP_FRAME_COUNT))
+		skim_frames_length=fps*1.8
+		n_clusters=int(percent*frame_count/skim_frames_length/100)+1
 
 	print "Getting frames of summary!"
 	frame_indices=[int(idx) for idx in open(directory+'frame_indices_'+ sys.argv[6]+'_'+str(n_clusters)+'_'+str(sampling_rate)+'.txt','r').read().splitlines()]
