@@ -36,3 +36,18 @@ def get_cnn_feat(frames_raw):
         features[i,:] = model.predict(x)
         i+=1
     return pca.fit_transform(features)
+
+def get_color_hist(frames_raw):
+    print "Generating linear Histrograms using OpenCV"
+    channels=['b','g','r']
+    
+    hist=[]
+    for frame in frames_raw:
+        feature_value=[cv2.calcHist([frame],[i],None,[num_bins],[0,256]) for i,col in enumerate(channels)]
+        hist.append(np.asarray(feature_value).flatten())
+    
+    hist=np.asarray(hist)
+    print "Done generating!"
+    print "Shape of histogram: " + str(hist.shape)
+    
+    return hist

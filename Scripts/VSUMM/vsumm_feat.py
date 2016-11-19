@@ -25,7 +25,7 @@ from get_video_feat import *
 # Argument 7: directory where keyframes will be saved
 # Argument 8: Name of the features used
 
-#frame chosen every k frames
+# frame chosen every k frames
 sampling_rate=int(sys.argv[2])
 
 # percent of video for summary
