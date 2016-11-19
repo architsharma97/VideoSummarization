@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import scipy.io
 import pywt
+import os, sys, glob
 from scc import strongly_connected_components_tree
 
 # System Arguments
@@ -31,7 +32,6 @@ def bhattacharyya_distance(color_histogram):
 	for i in range(len(color_histogram)):
 		temp_list = []
 		for j in range(len(color_histogram)):
-			print i,j
 			if i != j:
 				distance_matrix[i][j] = cv2.compareHist(color_histogram[i],color_histogram[j],cv2.cv.CV_COMP_BHATTACHARYYA)
 			else:
@@ -39,17 +39,36 @@ def bhattacharyya_distance(color_histogram):
 	return distance_matrix
 
 def main():
-	if len(sys.argv) < 3:
+	if len(sys.argv) < 2:
 		print "Incorrect no. of arguments, Halting !!!!"
 		return
 	print "Opening video!"
-	#frame chosen every k frames
-	sampling_rate=int(sys.argv[2])
+
 	video=imageio.get_reader(sys.argv[1]);
 	print "Video opened\nChoosing frames"
 
-	#replace this with the frames detected using shot boundary detection.
-	frames=[np.array(video.get_data(i*sampling_rate)) for i in range(len(video)/sampling_rate)]
+	if len(sys.argv) >=3:
+	#frame chosen every k frames
+		print "choosing frames uniformly"
+		sampling_rate=int(sys.argv[2])
+		frames=[np.array(video.get_data(i*sampling_rate)) for i in range(len(video)/sampling_rate)]
+
+	else:
+		# delete scenes.txt if it already exists
+		print "Detecting different shots"
+		if os.path.exists('scenes.txt'):
+			os.remove('scenes.txt')
+		# use the parameter currently set as "0.4" to control the no. of frames to be selected
+		cmd = 'ffprobe -show_frames -of compact=p=0 -f lavfi "movie='+sys.argv[1]+',select=gt(scene\,0.4)">> scenes.txt'
+		os.system(cmd)
+		seginfo = 'scenes.txt'
+		frame_index_list = []
+		for line in open(seginfo,'r'):
+			line = line.replace("|"," ")
+			line = line.replace("="," ")
+			parts = line.split()
+			frame_index_list.append(int(parts[11])) #appending the frame no. in the list of selected frames
+		frames=[np.array(video.get_data(frame_index_list[i])) for i in range(len(frame_index_list))]
 
 	print "Frames chosen"
 	#extracting color features from each representative frame
@@ -68,12 +87,11 @@ def main():
 	print "Constructing NNG"
 	eps_texture_NN = [None]*len(distance_matrix[0])
 	for i in range(0,len(distance_matrix[0])):
-		temp = float("inf")
+		temp = float(0)
 		for j in range(len(distance_matrix[i])):
-			if distance_matrix[i][j] <= temp:
+			if distance_matrix[i][j] >= temp:
 				eps_texture_NN[i] = j
 				temp = distance_matrix[i][j]
-		print eps_texture_NN[i], i
 
 	#constructing RNNG(reverse nearest neighbour graph) for the above NNG
 	print "Constructing RNNG"
@@ -95,7 +113,7 @@ def main():
 	print "Evaluating final summary"
 	summary = []
 	for scc in scc_graph:
-		summary.append(next(iter(scc))*sampling_rate)
+		summary.append(frame_index_list[next(iter(scc))])
 
 	# writing the summary in a file 
 	file = open(sys.argv[1]+'.summary', 'w')
