@@ -3,7 +3,6 @@ import imageio
 import numpy as np
 import cv2
 import scipy.io
-import sklearn.neighbors
 import pywt
 from scc import strongly_connected_components_tree
 
@@ -16,78 +15,92 @@ num_bins_H=32
 num_bins_S=4
 num_bins_V=2
 
-#frame chosen every k frames
-sampling_rate=int(sys.argv[2])
-
-
-# manual function to generate a 3D tensor representing histogram on HSV values
-# extremely slow
+# manual function to generate histogram on HSV values
 def generate_histogram_hsv(frame):
-	print "Received frame"
 	hsv_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+	hsv_frame = hsv_frame
 	global num_bins_H, num_bins_S, num_bins_V
-	hist = cv2.calcHist(frames[0], [0, 1, 2], None, [256/num_bins_H, 256/num_bins_S, 256/num_bins_V],
+	hist = cv2.calcHist([frame], [0, 1, 2], None, [256/num_bins_H, 256/num_bins_S, 256/num_bins_V],
 		[0, 256, 0, 256, 0, 256])
 	hist = cv2.normalize(hist).flatten()
-	print "Generated Histogram"
 	return hist;
 
+# function to calculate the distance matrix for bhattacharyya_distance
 def bhattacharyya_distance(color_histogram):
-	distance_matrix = []
+	distance_matrix=np.zeros((len(color_histogram),len(color_histogram)))
 	for i in range(len(color_histogram)):
 		temp_list = []
 		for j in range(len(color_histogram)):
-			hist = cv2.compareHist(color_histogram[i],color_histogram[j],cv2.cv.CV_COMP_BHATTACHARYYA)
-			temp_list.append(hist)
-		distance_matrix.append(temp_list)
+			print i,j
+			if i != j:
+				distance_matrix[i][j] = cv2.compareHist(color_histogram[i],color_histogram[j],cv2.cv.CV_COMP_BHATTACHARYYA)
+			else:
+				distance_matrix[i][j] = float("inf")
 	return distance_matrix
 
-sklearn.neighbors.kneighbors_graph(color_histogram, n_neighbors, mode='connectivity', 
-	metric='minkowski', p=2, metric_params=None, include_self=False, n_jobs=1)
-
-cv2.compareHist(color_histogram[1],color_histogram[2],cv2.cv.CV_COMP_BHATTACHARYYA)
-
 def main():
+	if len(sys.argv) < 3:
+		print "Incorrect no. of arguments, Halting !!!!"
+		return
 	print "Opening video!"
-	global sampling_rate
+	#frame chosen every k frames
+	sampling_rate=int(sys.argv[2])
 	video=imageio.get_reader(sys.argv[1]);
 	print "Video opened\nChoosing frames"
+
 	#replace this with the frames detected using shot boundary detection.
-	#choosing the subset of frames from which video summary will be generateed
-	sampling_rate = 1000;
-	frames=[video.get_data(i*sampling_rate) for i in range(len(video)/sampling_rate)]
+	frames=[np.array(video.get_data(i*sampling_rate)) for i in range(len(video)/sampling_rate)]
+
 	print "Frames chosen"
-	print "Length of video %d" % len(video)		
-	#extracting color features from each frame
-	print "Generating 3D Tensor Histrograms"
+	#extracting color features from each representative frame
+	print "Generating Histrograms"
 	color_histogram=[generate_histogram_hsv(frame) for frame in frames]
 	print "Color Histograms generated"
 
-	#to-do(optional) : extract texture features for each frame
+	#to-do (optional): extract texture features for each frame
 
-	#calculate distance between feature histograms
+	#calculate distance between each pair of feature histograms
+	print "Evaluating the distance matirix for feature hitograms"
 	distance_matrix = bhattacharyya_distance(color_histogram)
+	print "Done Evalualting distance matrix"
 
-	#calculate NNG & RNNG
+	#constructing NNG (nearest neighbour graph) based of distance_matrix
+	print "Constructing NNG"
 	eps_texture_NN = [None]*len(distance_matrix[0])
-	eps_texture_RNN = [[]]*len(distance_matrix[0])
-	for i in range(len(distance_matrix[0])):
+	for i in range(0,len(distance_matrix[0])):
 		temp = float("inf")
 		for j in range(len(distance_matrix[i])):
 			if distance_matrix[i][j] <= temp:
 				eps_texture_NN[i] = j
 				temp = distance_matrix[i][j]
-		eps_texture_RNN[eps_texture_NN[i]].append(i)
+		print eps_texture_NN[i], i
 
+	#constructing RNNG(reverse nearest neighbour graph) for the above NNG
+	print "Constructing RNNG"
+	eps_texture_RNN = {}
+	for i in range(len(eps_texture_NN)):
+		if eps_texture_NN[i] in eps_texture_RNN.keys():
+			eps_texture_RNN[eps_texture_NN[i]].append(i)
+		else:
+			eps_texture_RNN[eps_texture_NN[i]] = [i]
+		if i not in eps_texture_RNN.keys():
+			eps_texture_RNN[i] = []
+
+	#calculating the SCCs(strongly connected components) for RNNG
+	print "Finiding the strongly connected components of RNNG"
 	vertices = [i for i in range(0,len(frames))]
-	edges = {}
-	for vertex in vertices:
-		edges[vertex] = eps_texture_RNN[vertex]
-	#to-do : Add code to return the SCC of the Reverse nearest neighbor graph (RNNG) 
-	strongly_connected_components_tree(vertices, edges)
+	scc_graph = strongly_connected_components_tree(vertices, eps_texture_RNN)
 
+	#choosing one frame per SCC in summary
+	print "Evaluating final summary"
+	summary = []
+	for scc in scc_graph:
+		summary.append(next(iter(scc))*sampling_rate)
 
-	#to-do : Select represenatative frames for each RNNG(it'll be the summary)
+	# writing the summary in a file 
+	file = open(sys.argv[1]+'.summary', 'w')
+	for item in summary:
+	  file.write("%s\n" % item)	
 
 if __name__ == '__main__':
 	main()

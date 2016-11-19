@@ -65,7 +65,6 @@ for line in open(seginfo,'r'):
         tbm = int((tb%3600)/60)
         tbs = ((tb%3600)%60)%60
         tbw = str(tbh) + ':' + str(tbm) + ':' + str(tbs)
-
     cmd += tbw + ' -i uncompressed.avi -vcodec mpeg4 -acodec copy -t ' # change codecs if necessary
     # duration
     td = te - tb
@@ -73,37 +72,36 @@ for line in open(seginfo,'r'):
     tdm = int((td%3600)/60)
     tds = ((td%3600)%60)%60
     tdw = str(tdh) + ':' + str(tdm) + ':' + str(tds)
-    
     cmd += tdw + ' scenes/' + '%(#)04d.avi' % {"#":count}
     os.system(cmd)
     tb = te
     count += 1
 
 # last shot
-cmd = 'ffmpeg -ss '
-tbh = int(tb/3600)
-tbm = int((tb%3600)/60)
-tbs = ((tb%3600)%60)%60
-tbw = str(tbh) + ':' + str(tbm) + ':' + str(tbs)
-cmd += tbw + ' -i uncompressed.avi -vcodec mpeg4 -acodec copy -t ' # change codecs if necessary
+# cmd = 'ffmpeg -ss '
+# tbh = int(tb/3600)
+# tbm = int((tb%3600)/60)
+# tbs = ((tb%3600)%60)%60
+# tbw = str(tbh) + ':' + str(tbm) + ':' + str(tbs)
+# cmd += tbw + ' -i uncompressed.avi -vcodec mpeg4 -acodec copy -t ' # change codecs if necessary
 
-dur = 'duration.txt';
-for line in open(dur,'r'):
-    line = line.replace(":"," ")
-    line = line.replace(","," ")
-    parts = line.split()
-    te = float(parts[1])*3600 + float(parts[2])*60 + float(parts[3])
+# dur = 'duration.txt';
+# for line in open(dur,'r'):
+#     line = line.replace(":"," ")
+#     line = line.replace(","," ")
+#     parts = line.split()
+#     te = float(parts[1])*3600 + float(parts[2])*60 + float(parts[3])
 
-td = te-tb
-tdh = int(td/3600)
-tdm = int((td%3600)/60)
-tds = int(((td%3600)%60)%60)
-tds = ((td%3600)%60)%60
-tdw = str(tdh) + ':' + str(tdm) + ':' + str(tds)
-cmd += tdw + ' scenes/' + '%(#)04d.avi' % {"#":count}
-os.system(cmd)
-fstr = str(count) + ' ' + str(te) + '\n'
-f.write(fstr)
+# td = te-tb
+# tdh = int(td/3600)
+# tdm = int((td%3600)/60)
+# tds = int(((td%3600)%60)%60)
+# tds = ((td%3600)%60)%60
+# tdw = str(tdh) + ':' + str(tdm) + ':' + str(tds)
+# cmd += tdw + ' scenes/' + '%(#)04d.avi' % {"#":count}
+# os.system(cmd)
+# fstr = str(count) + ' ' + str(te) + '\n'
+# f.write(fstr)
 
 os.remove('scenes.txt')
 os.remove('uncompressed.avi')
