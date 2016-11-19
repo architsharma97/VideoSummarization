@@ -6,7 +6,7 @@ sampling_rate="1";
 
 for percent in "15"; do
 	echo $percent
-	for filename in $DIR"paluma_jump.mp4";do
+	for filename in $DIR*".mp4";do
 		echo $filename
 		cd $HOMEDIR
 		name=${filename##*/};
