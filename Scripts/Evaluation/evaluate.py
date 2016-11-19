@@ -13,6 +13,7 @@ import cv2
 
 # Argument 5: File where the results will be written
 # Argument 6: Name of the features used
+# Argument 7: Skimming (Put 1)
 
 def main():
 	video=sys.argv[1]
@@ -24,7 +25,7 @@ def main():
 	if video_length/sampling_rate < n_clusters:
 		n_clusters=video_length/sampling_rate
 
-	if sys.argv[6]=="color_hist":
+	if len(sys.argv)>7 and sys.argv[7]=="1":
 		video_cv=cv2.VideoCapture(os.path.abspath(os.path.expanduser(sys.argv[1])))
 		fps=int(video_cv.get(cv2.CAP_PROP_FPS))
 		frame_count=int(video_cv.get(cv2.CAP_PROP_FRAME_COUNT))

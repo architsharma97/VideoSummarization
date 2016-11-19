@@ -11,7 +11,7 @@ HOMEDIR=$PWD;
 # percent of the actual video
 for percent in "15"; do
 	for sampling_rate in "5"; do
-		for filename in $DIR"paluma_jump.mp4"; do
+		for filename in $DIR*".mp4"; do
 			echo $filename
 			cd $HOMEDIR
 			name=${filename##*/};
@@ -20,7 +20,7 @@ for percent in "15"; do
 			# mkdir $OUT$folder_name"/keyframes";
 			python vsumm_skim.py $filename $sampling_rate $percent $OUT$folder_name"/" color_hist;
 			cd ../Evaluation
-			python evaluate.py $filename $sampling_rate $percent $OUT$folder_name"/" $OUT$folder_name"/final_results_color_hist_"$percent".txt" color_hist;
+			python evaluate.py $filename $sampling_rate $percent $OUT$folder_name"/" $OUT$folder_name"/final_results_color_hist_"$percent".txt" color_hist 1;
 		done
 	done
 done

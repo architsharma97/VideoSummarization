@@ -52,7 +52,7 @@ def main():
 	print "Length of video %d" % frames.shape[0]
 	
 	# REPLACE WITH APPROPRIATE FEATURES
-	features=get_color_hist(frames,16)
+	features=get_color_hist(frames)
 	print "Shape of features: " + str(features.shape)
 
 	# clustering: defaults to using the features
@@ -74,7 +74,7 @@ def main():
 	frames_indices=[]
 	for centre in centres:
 		print centre
-		for idx in range(int(centre*sampling_rate-skim_frames_length/2),int(centre*sampling_rate+skim_frames_length/2)+1):
+		for idx in range(max(int(centre*sampling_rate-skim_frames_length/2),0),min(int(centre*sampling_rate+skim_frames_length/2)+1),frame_count):
 			frames_indices.append(idx)
 	frames_indices=sorted(set(frames_indices))
 
