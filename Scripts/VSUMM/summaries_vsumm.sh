@@ -11,7 +11,7 @@ HOMEDIR=$PWD;
 # percent of the actual video
 for percent in "15"; do
 	for sampling_rate in "5"; do
-		for filename in $DIR"paluma_jump.mp4"; do
+		for filename in $DIR"playing_ball.mp4"; do
 			echo $filename
 			echo $sampling_rate
 			cd $HOMEDIR
@@ -21,7 +21,7 @@ for percent in "15"; do
 			# mkdir $OUT$folder_name"/keyframes";
 			python vsumm_feat.py $filename $sampling_rate $percent 0 0 1 $OUT$folder_name"/" cnn_reduced;
 			cd ../Evaluation
-			python evaluate.py $filename $sampling_rate $percent $OUT$folder_name"/" $OUT$folder_name"/Final_Results_cnn_reduced_"$percent".txt" cnn;
+			python evaluate.py $filename $sampling_rate $percent $OUT$folder_name"/" $OUT$folder_name"/Final_Results_cnn_reduced_"$percent".txt" cnn_reduced;
 		done
 	done
 done
