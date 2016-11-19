@@ -1,3 +1,6 @@
 /Data/SumMe/
 .DS_Store
 /Data/TVSum50
+/Data
+*.avi
+*.mkv
