@@ -28,7 +28,7 @@ from get_video_feat import *
 #frame chosen every k frames
 sampling_rate=int(sys.argv[2])
 
-# number of centroids
+# percent of video for summary
 percent=int(sys.argv[3])
 
 # globalizing
@@ -54,10 +54,10 @@ def main():
     print "Opening video!"
     capture = cv2.VideoCapture(os.path.abspath(os.path.expanduser(sys.argv[1])))
     print "Video opened\nChoosing frames"
-	#choosing the subset of frames from which video summary will be generateed
+	
+    #choosing the subset of frames from which video summary will be generateed
     frames = []
     i=0
-    # print sampling_rate
     while(capture.isOpened()):
         if i%sampling_rate==0:
             capture.set(1,i)
