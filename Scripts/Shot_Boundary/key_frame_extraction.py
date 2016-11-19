@@ -5,6 +5,7 @@ import cv2
 import scipy.io
 import sklearn.neighbors
 import pywt
+from scc import strongly_connected_components_tree
 
 # System Arguments
 # Argument 1: Location of the video
@@ -53,6 +54,7 @@ def main():
 	print "Video opened\nChoosing frames"
 	#replace this with the frames detected using shot boundary detection.
 	#choosing the subset of frames from which video summary will be generateed
+	sampling_rate = 1000;
 	frames=[video.get_data(i*sampling_rate) for i in range(len(video)/sampling_rate)]
 	print "Frames chosen"
 	print "Length of video %d" % len(video)		
@@ -66,7 +68,7 @@ def main():
 	#calculate distance between feature histograms
 	distance_matrix = bhattacharyya_distance(color_histogram)
 
-	#calculate NNG
+	#calculate NNG & RNNG
 	eps_texture_NN = [None]*len(distance_matrix[0])
 	eps_texture_RNN = [[]]*len(distance_matrix[0])
 	for i in range(len(distance_matrix[0])):
@@ -77,8 +79,13 @@ def main():
 				temp = distance_matrix[i][j]
 		eps_texture_RNN[eps_texture_NN[i]].append(i)
 
-
+	vertices = [i for i in range(0,len(frames))]
+	edges = {}
+	for vertex in vertices:
+		edges[vertex] = eps_texture_RNN[vertex]
 	#to-do : Add code to return the SCC of the Reverse nearest neighbor graph (RNNG) 
+	strongly_connected_components_tree(vertices, edges)
+
 
 	#to-do : Select represenatative frames for each RNNG(it'll be the summary)
 
