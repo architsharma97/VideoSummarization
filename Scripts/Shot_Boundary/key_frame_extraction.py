@@ -38,6 +38,22 @@ def bhattacharyya_distance(color_histogram):
 				distance_matrix[i][j] = float("inf")
 	return distance_matrix
 
+def save_keyframes(frame_indices, summary_frames):
+	print "Saving frame indices"
+	video_name = sys.argv[1]
+	video_name = video_name.split('.')
+	video_name = video_name[0].split('/')
+	out_file=open("frame_indices_"+video_name[1]+".txt",'w')
+	for idx in frame_indices:
+		out_file.write(str(idx)+'\n')
+	print "Saved indices"
+
+	# print "Saving frames"
+	# for i,frame in enumerate(summary_frames):
+	# 	cv2.imwrite(str(sys.argv[7])+"keyframes/frame%d.jpg"%i, frame)
+	# print "Frames saved"
+
+
 def main():
 	if len(sys.argv) < 2:
 		print "Incorrect no. of arguments, Halting !!!!"
@@ -59,8 +75,13 @@ def main():
 		if os.path.exists('scenes.txt'):
 			os.remove('scenes.txt')
 		# use the parameter currently set as "0.4" to control the no. of frames to be selected
-		cmd = 'ffprobe -show_frames -of compact=p=0 -f lavfi "movie='+sys.argv[1]+',select=gt(scene\,0.4)">> scenes.txt'
+		video_name = sys.argv[1]
+		video_name = video_name.split('/')[-1]
+		print video_name
+		os.chdir('input')
+		cmd = 'ffprobe -show_frames -of compact=p=0 -f lavfi "movie='+str(video_name)+',select=gt(scene\,0.1)">> ../scenes.txt'
 		os.system(cmd)
+		os.chdir('..')
 		seginfo = 'scenes.txt'
 		frame_index_list = []
 		for line in open(seginfo,'r'):
@@ -68,9 +89,16 @@ def main():
 			line = line.replace("="," ")
 			parts = line.split()
 			frame_index_list.append(int(parts[11])) #appending the frame no. in the list of selected frames
-		frames=[np.array(video.get_data(frame_index_list[i])) for i in range(len(frame_index_list))]
+		print frame_index_list, len(video)
+		frames = []
+		for i in range(len(frame_index_list)):
+			if frame_index_list[i] >= 0 and frame_index_list[i] < len(video):
+				frames.append(np.array(video.get_data(frame_index_list[i])))
 
-	print "Frames chosen"
+	if len(frames) <= 0:
+		print "unable to detect any shot, Halting !!!!"
+		return
+	print "Frames chosen: ",len(frame_index_list)
 	#extracting color features from each representative frame
 	print "Generating Histrograms"
 	color_histogram=[generate_histogram_hsv(frame) for frame in frames]
@@ -112,13 +140,18 @@ def main():
 	#choosing one frame per SCC in summary
 	print "Evaluating final summary"
 	summary = []
+	summary_frames = []
+	skim_length = 40
 	for scc in scc_graph:
-		summary.append(frame_index_list[next(iter(scc))])
+		frame_to_add = frame_index_list[next(iter(scc))]
+		for i in range(-skim_length,skim_length):
+			if frame_to_add + i > 0 and frame_to_add + i < len(video):
+				summary.append(frame_to_add+i)
+				summary_frames.append(video.get_data(frame_to_add + i))
 
 	# writing the summary in a file 
-	file = open(sys.argv[1]+'.summary', 'w')
-	for item in summary:
-	  file.write("%s\n" % item)	
+	os.chdir('summary')
+	save_keyframes(summary, summary_frames)
 
 if __name__ == '__main__':
 	main()
