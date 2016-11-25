@@ -13,5 +13,5 @@ ffmpeg -i ../../../../Data/SumMe/videos/$name image%d.jpg
 mkdir ../$keyFrames
 cd ../../			#pwd=dir/
 python videoSumSIFT.py ../../Data/SumMe/videos/$name $folder_name
-cd $folder_name/$keyFrames/		#pwd=dir/$folder_name/$keyFrames
-ffmpeg -i image%d.jpg ../summary_modified.mp4
+# cd $folder_name/$keyFrames/		#pwd=dir/$folder_name/$keyFrames
+# ffmpeg -i image%d.jpg ../summary_modified.mp4
