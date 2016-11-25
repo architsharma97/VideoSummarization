@@ -146,8 +146,9 @@ def main():
 		frame_to_add = frame_index_list[next(iter(scc))]
 		for i in range(-skim_length,skim_length):
 			if frame_to_add + i > 0 and frame_to_add + i < len(video):
-				summary.append(frame_to_add+i)
-				summary_frames.append(video.get_data(frame_to_add + i))
+				if frame_to_add+i not in summary:
+					summary.append(frame_to_add+i)
+				# summary_frames.append(video.get_data(frame_to_add + i))
 
 	# writing the summary in a file 
 	os.chdir('summary')
