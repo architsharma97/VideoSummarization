@@ -8,7 +8,7 @@ chmod +x ./run_this.sh
 ./run_this.sh
 ```
 
-Following is the list of dependencies: [imageio](https://imageio.github.io/), numpy, matplotlib, opencv3, tensorflow, scikit-learn. 
+Following is the list of dependencies: [imageio](https://imageio.github.io/), numpy, matplotlib, opencv3, scikit-learn. 
 ```
 sudo pip install imageio
 ```
